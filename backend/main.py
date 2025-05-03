@@ -36,6 +36,18 @@ def update_contact(user_id):
     db.session.commit()
     return(jsonify({"message":"User Created"}),201)
 
+@app.route("/delete_user/<int:user_id>",methods=["DELETE"])
+def delete_user(user_id):
+    if not user_id:
+        return(jsonify({"message":"User not found"}),404)
+    contact=Contact.query.get(user_id)
+    try:
+        db.session.delete(user_id)
+        db.session.commit()
+        return jsonify({"message":"user deleted"}),200
+    except Exception as e:
+        return jsonify({"message":str(e)}),400
+
 if __name__=="__main__":
     with app.app_context():
         db.create_all()
