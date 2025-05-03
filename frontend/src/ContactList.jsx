@@ -6,12 +6,14 @@ const ContactList=({contacts})=>{
         <div>
             <h2>Contact</h2>
             <table>
+                <thead>
                 <tr>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email</th>
                     <th>Action</th>
                 </tr>
+                </thead>
                 <tbody>
                     {contacts.map((contact)=>{
                         return(
