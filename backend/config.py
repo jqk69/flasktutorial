@@ -1,6 +1,6 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+from flask import Flask #type:ignore
+from flask_sqlalchemy import SQLAlchemy #type:ignore
+from flask_cors import CORS #type:ignore
 
 app=Flask(__name__)
 CORS(app)

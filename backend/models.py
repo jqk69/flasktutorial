@@ -1,5 +1,5 @@
 from config import db
-from flask import jsonify
+from flask import jsonify # type: ignore
 
 class Contact(db.Model):
     id=db.Column(db.Integer,primary_key=True)
