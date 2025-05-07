@@ -24,7 +24,7 @@ def create_contact():
     
     return jsonify({"message":"User Created"}),201
 
-@app.route("/update_contact/<int:user_id>")
+@app.route("/update_contact/<int:user_id>",methods=["PATCH"])
 def update_contact(user_id):
     contact=Contact.query.get(user_id)
     if not contact:
@@ -36,13 +36,13 @@ def update_contact(user_id):
     db.session.commit()
     return jsonify({"message":"User Created"}),201
 
-@app.route("/delete_user/<int:user_id>",methods=["DELETE"])
+@app.route("/delete_contact/<int:user_id>",methods=["DELETE"])
 def delete_user(user_id):
     if not user_id:
         return jsonify({"message":"User not found"}),404
     contact=Contact.query.get(user_id)
     try:
-        db.session.delete(user_id)
+        db.session.delete(contact)
         db.session.commit()
         return jsonify({"message":"user deleted"}),200
     except Exception as e:

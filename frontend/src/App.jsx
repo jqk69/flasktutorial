@@ -1,43 +1,56 @@
-import { useState,useEffect } from 'react'
-import './App.css'
-import ContactList from './ContactList'
-import ContactForm from './ContactForm'
+import { useState, useEffect } from "react";
+import ContactList from "./ContactList";
+import "./App.css";
+import ContactForm from "./ContactForm";
 
 function App() {
-  const [contacts,setContact] = useState([])
+  const [contacts, setContacts] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [currentContact, setCurrentContact] = useState({})
 
-  const [isModalOpen,setIsModalOpen]=useState(false)
-  const closeModal=()=>{
+  useEffect(() => {
+    fetchContacts()
+  }, []);
+
+  const fetchContacts = async () => {
+    const response = await fetch("http://127.0.0.1:5000/contacts");
+    const data = await response.json();
+    setContacts(data.contacts);
+  };
+
+  const closeModal = () => {
     setIsModalOpen(false)
+    setCurrentContact({})
   }
-  const openCreateModal=()=>{
-    if (!isModalOpen) setIsModalOpen(true) 
+
+  const openCreateModal = () => {
+    if (!isModalOpen) setIsModalOpen(true)
   }
-  useEffect(()=>{
-    fetchContact()
-  },[])
 
-  const fetchContact=async()=>{
+  const openEditModal = (contact) => {
+    if (isModalOpen) return
+    setCurrentContact(contact)
+    setIsModalOpen(true)
+  }
 
-    const response=await fetch("http://127.0.0.1:5000/contacts")
-    const data=await response.json()
-    setContact(data.contacts)
-    console.log(data.contacts)
+  const onUpdate = () => {
+    closeModal()
+    fetchContacts()
   }
 
   return (
     <>
-      <ContactList contacts={contacts}/>
-      <button onClick={openCreateModal}>Create New Contact</button><br />
-      {isModalOpen && 
-        <><br /><div>
+      <ContactList contacts={contacts} updateContact={openEditModal} updateCallback={onUpdate} />
+      <button onClick={openCreateModal}>Create New Contact</button>
+      {isModalOpen && <div className="modal">
+        <div className="modal-content">
           <span className="close" onClick={closeModal}>&times;</span>
-          <ContactForm></ContactForm>
-        </div></>
+          <ContactForm existingContact={currentContact} updateCallback={onUpdate} />
+        </div>
+      </div>
       }
-      
     </>
-  )
+  );
 }
 
-export default App
+export default App;
